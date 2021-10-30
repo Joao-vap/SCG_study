@@ -90,19 +90,16 @@ def read_init_state(file, N):
 
 if __name__ == '__main__':
 
-    init = read_init_state("cannon.txt", size)
+    init = read_init_state("txts/cannon_2.txt", size)
     got = table(init, size)
     fig, ax = plt.subplots()
-
-    # ax.imshow(got.floats_matrix(), cmap=cmap)
-    # plt.show()
 
     def animate(i):
         ax.imshow(got.floats_matrix(), cmap=cmap)
         got.update()
 
-    anim = FuncAnimation(fig, animate, frames=200)
-    anim.save('cannon.gif', fps=20)
+    anim = FuncAnimation(fig, animate, frames=250)
+    anim.save('gifs/cannon_2.gif', fps=20)
 
 
 
