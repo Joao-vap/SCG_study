@@ -54,8 +54,6 @@ class block:
         elif count > 3:
             if self.state == 1:
                 state = 0
-            else:
-                state = 1
         
         return state
 
@@ -92,16 +90,19 @@ def read_init_state(file, N):
 
 if __name__ == '__main__':
 
-    init = read_init_state("stable_1", size)
+    init = read_init_state("cannon.txt", size)
     got = table(init, size)
     fig, ax = plt.subplots()
+
+    # ax.imshow(got.floats_matrix(), cmap=cmap)
+    # plt.show()
 
     def animate(i):
         ax.imshow(got.floats_matrix(), cmap=cmap)
         got.update()
 
-    anim = FuncAnimation(fig, animate, frames=50)
-    anim.save('got.gif', fps=10)
+    anim = FuncAnimation(fig, animate, frames=200)
+    anim.save('cannon.gif', fps=20)
 
 
 
