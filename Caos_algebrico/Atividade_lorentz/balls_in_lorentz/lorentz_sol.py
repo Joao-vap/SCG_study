@@ -1,6 +1,6 @@
 #################################################################
 # import modules
-from mpl_toolkits import mplot3d
+from matplotlib.animation import FuncAnimation
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -13,6 +13,11 @@ c = 28
 # iterations
 N = 10000
 dt = 0.01
+
+# config for animation
+frames = 300
+fps = 40
+mksize = 0.2
 
 # possible colors
 colors = ['red', 'blue', 'green', 'yellow', 'black']
@@ -46,7 +51,24 @@ class particle:
         self.y = self.y + self.dy(x, y, z)
         self.z = self.z + self.dz(x, y, z)
 
+def get_paths(particles, N):
 
+    x, y, z = [], [], []
+
+    for i in range(0, len(particles)):
+
+        x.append(np.zeros(N))
+        y.append(np.zeros(N))
+        z.append(np.zeros(N))
+
+        for j in range(0, N):
+            particles[i].update()
+            x[i][j] = particles[i].x
+            y[i][j] = particles[i].y
+            z[i][j] = particles[i].z
+
+    return x, y, z
+        
 #################################################################
 
 if __name__ == '__main__':
@@ -55,21 +77,16 @@ if __name__ == '__main__':
     ax = fig.add_subplot(projection='3d')
 
     p1 = particle(.1, .1, .1)
-    p2 = particle(.01, .01, .01)
+    p2 = particle(.2, .2, .2)
     particles = [p1, p2]
 
-    for i in range(0, len(particles)):
+    x, y, z = get_paths(particles, N)
 
-        x = np.zeros(N)
-        y = np.zeros(N)
-        z = np.zeros(N)
+    def animate(i):
+        for j in range(0, len(particles)):
+            ax.scatter(x[j][:i], y[j][:i], z[j][:i], color=colors[j], s=mksize)
 
-        for j in range(0, N):
-            particles[i].update()
-            x[j] = particles[i].x
-            y[j] = particles[i].y
-            z[j] = particles[i].z
-        
-        ax.plot(x, y, z, color = colors[i], label = 'particle ' + str(i), linewidth = 0.1)
+    anim = FuncAnimation(fig, animate, frames=frames)
+    anim.save('path.gif', fps=fps)
 
     plt.show()
