@@ -93,7 +93,7 @@ class table:
         update grid do decide next frame
         '''
         pivo_grid = deepcopy(self.grid)
-        for col in range(0, int(self.size*7/10)):
+        for col in range(0, int(self.size*9/10)):
             for lin in range(0, self.size):
                 self.grid[col][lin].state = pivo_grid[col][lin].tanatos(pivo_grid)
 
