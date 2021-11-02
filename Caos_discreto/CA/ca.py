@@ -95,7 +95,7 @@ class table:
             self.grid[lin] = deepcopy(self.grid[lin+1])
             
         for col in range(1, self.size-1):
-            self.grid[size-1][col].state = pivo_line[col].outer_totalistic(pivo_line)
+            self.grid[size-1][col].state = pivo_line[col].totalistic(pivo_line)
 
         self.last_line = deepcopy(self.grid[size-1])
 
@@ -119,4 +119,4 @@ if __name__ == '__main__':
         got.update()
 
     anim = FuncAnimation(fig, animate, frames=frames)
-    anim.save('gifs/ca_out_tot.gif', fps=fps)
+    anim.save('gifs/ca_tot.gif', fps=fps)
