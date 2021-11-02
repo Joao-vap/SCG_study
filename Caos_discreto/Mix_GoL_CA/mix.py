@@ -8,8 +8,13 @@ from matplotlib.animation import FuncAnimation
 ########################### constants ##################################
 # grid size
 size = 100
+
 # colors
 cmap = colors.ListedColormap(['black', 'white'])
+
+#animation
+frames = 200
+fps = 10
 
 ############################# classes ##################################
 
@@ -56,6 +61,18 @@ class block:
                 state = 0
         
         return state
+    
+    def elementar(self, last_line):
+        
+        state = 0
+
+        if (last_line[self.j].state == 0) and (last_line[self.j].state == last_line[self.j+1].state):
+            state = last_line[self.j-1].state
+        else:
+            state = int(not bool(last_line[self.j-1].state))
+
+        return state
+
 
 class table:
 
@@ -65,19 +82,35 @@ class table:
 
     def __init__(self, matrix, N):
         self.grid = [[block(i, j, matrix[i][j]) for j in range(0, N)] for i in range(0, N)]
+        self.last_line = self.grid[-1]
         self.size = N
 
     def floats_matrix(self):
         return [[float(self.grid[i][j].state) for j in range(0, self.size)] for i in range(0, self.size)]
 
-    def update(self):
+    def update_gol(self):
         '''
         update grid do decide next frame
         '''
         pivo_grid = deepcopy(self.grid)
-        for col in range(0, self.size):
+        for col in range(0, int(self.size*7/10)):
             for lin in range(0, self.size):
                 self.grid[col][lin].state = pivo_grid[col][lin].tanatos(pivo_grid)
+
+    def update_ca(self):
+        '''
+        update grid do decide next frame
+        '''
+
+        pivo_line = deepcopy(self.last_line)
+
+        for lin in range(int(self.size*7/10), self.size-1):
+            self.grid[lin] = deepcopy(self.grid[lin+1])
+            
+        for col in range(1, self.size-1):
+            self.grid[size-1][col].state = pivo_line[col].elementar(pivo_line)
+
+        self.last_line = deepcopy(self.grid[size-1])
 
 ####################### auxiliar functions #############################
 
@@ -90,16 +123,14 @@ def read_init_state(file, N):
 
 if __name__ == '__main__':
 
-    init = read_init_state("txts/cannon_2.txt", size)
+    init = read_init_state("mix.txt", size)
     got = table(init, size)
     fig, ax = plt.subplots()
 
     def animate(i):
         ax.imshow(got.floats_matrix(), cmap=cmap)
-        got.update()
+        got.update_ca()
+        got.update_gol()
 
-    anim = FuncAnimation(fig, animate, frames=250)
-    anim.save('gifs/cannon_2.gif', fps=20)
-
-
-
+    anim = FuncAnimation(fig, animate, frames=frames)
+    anim.save('mix.gif', fps=fps)
