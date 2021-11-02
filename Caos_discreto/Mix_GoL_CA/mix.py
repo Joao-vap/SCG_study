@@ -104,7 +104,7 @@ class table:
 
         pivo_line = deepcopy(self.last_line)
 
-        for lin in range(int(self.size*7/10), self.size-1):
+        for lin in range(int(self.size*9/10), self.size-1):
             self.grid[lin] = deepcopy(self.grid[lin+1])
             
         for col in range(1, self.size-1):
