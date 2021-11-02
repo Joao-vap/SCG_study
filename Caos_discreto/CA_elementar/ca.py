@@ -29,11 +29,8 @@ class block:
         self.j = j
         self.state = state
 
-    def tanatos(self, last_line):
+    def elementar(self, last_line):
         
-        '''
-        Greek personification of Death, control if a block lives. 
-        '''
         state = 0
 
         if (last_line[self.j].state == 0) and (last_line[self.j].state == last_line[self.j+1].state):
@@ -41,8 +38,36 @@ class block:
         else:
             state = int(not bool(last_line[self.j-1].state))
 
-        # print(state, last_line[self.j-1].state, last_line[self.j].state, last_line[self.j+1].state)
         return state
+
+    def totalistic(self, last_line):
+
+        state = 0
+
+        if  last_line[self.j-1].state == last_line[self.j+1].state:
+            state = 0
+        else:
+            state = 1
+
+        return state
+
+    def outer_totalistic(self, last_line):
+
+        state = 0
+
+        if  last_line[self.j-1].state == last_line[self.j+1].state:
+            if self.state == 0:
+                state = 0
+            else:
+                state = 1
+        else:
+            if self.state == 0:
+                state = 1
+            else:
+                state = 0
+
+        return state
+
 
 class table:
 
@@ -70,7 +95,7 @@ class table:
             self.grid[lin] = deepcopy(self.grid[lin+1])
             
         for col in range(1, self.size-1):
-            self.grid[size-1][col].state = pivo_line[col].tanatos(pivo_line)
+            self.grid[size-1][col].state = pivo_line[col].outer_totalistic(pivo_line)
 
         self.last_line = deepcopy(self.grid[size-1])
 
@@ -94,4 +119,4 @@ if __name__ == '__main__':
         got.update()
 
     anim = FuncAnimation(fig, animate, frames=frames)
-    anim.save('gifs/ca_elem.gif', fps=fps)
+    anim.save('gifs/ca_out_tot.gif', fps=fps)
