@@ -8,14 +8,14 @@ from matplotlib.animation import FuncAnimation
 ########################### constants ##################################
 # grid size
 sizex = 500
-sizey = 50
+sizey = 100
 
 # # colors
 # cmap = colors.ListedColormap(['black', 'white', 'red', 'blue', 'green', 'yellow', 'cyan', 'magenta'])
 
 #animation
-frames = 500
-fps = 10
+frames = 1000
+fps = 20
 
 ############################# classes ##################################
 
@@ -106,7 +106,7 @@ class table:
                     self.grid[col][lin].desaturate = False
                 else:
                     if self.grid[col][lin].color > 0:
-                        self.grid[col][lin].color /= 1.1
+                        self.grid[col][lin].color /= 1
 
 
     def update_ca(self):
@@ -150,8 +150,9 @@ if __name__ == '__main__':
 
     def animate(i):
         got.update_ca()
-        ax.imshow(got.floats_matrix(), cmap="inferno", vmin=0, vmax=6)
+        ax.imshow(got.floats_matrix(), cmap="inferno", vmin=0, vmax=80)
         got.update_gol()
+        print(i/frames*100, "%")
 
     anim = FuncAnimation(fig, animate, frames=frames)
-    anim.save('mix5.gif', fps=fps)
+    anim.save('mix_m3.gif', fps=fps)
